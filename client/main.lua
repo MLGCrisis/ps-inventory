@@ -80,7 +80,7 @@ local function OpenVending()
     ShopItems.items = Config.VendingItem
     ShopItems.slots = #Config.VendingItem
     TriggerServerEvent("inventory:server:OpenInventory", "shop", "Vendingshop_"..math.random(1, 99), ShopItems)
-end
+end 
 
 local function DrawText3Ds(x, y, z, text)
 	SetTextScale(0.35, 0.35)
@@ -521,6 +521,7 @@ RegisterNetEvent('inventory:client:CraftItems', function(itemName, itemCosts, am
 	}, {}, {}, function() -- Done
 		StopAnimTask(ped, "mini@repair", "fixing_a_player", 1.0)
         TriggerServerEvent("inventory:server:CraftItems", itemName, itemCosts, amount, toSlot, points)
+        TriggerEvent('wais:addmissionxp:craft', 1) -- added by pamela for wais battlepass
         TriggerEvent('inventory:client:ItemBox', QBCore.Shared.Items[itemName], 'add')
         isCrafting = false
 	end, function() -- Cancel
@@ -569,6 +570,7 @@ RegisterNetEvent('inventory:client:PickupSnowballs', function()
     }, {}, {}, {}, function() -- Done
         ClearPedTasks(ped)
         TriggerServerEvent('inventory:server:snowball', 'add')
+        TriggerEvent('wais:addmissionxp:pickupsnow', 1) -- added by pamela for wais battlepass
         TriggerEvent('inventory:client:ItemBox', QBCore.Shared.Items["snowball"], "add")
     end, function() -- Cancel
         ClearPedTasks(ped)
@@ -848,6 +850,7 @@ end)
 
 RegisterNUICallback('RobMoney', function(data, cb)
     TriggerServerEvent("police:server:RobPlayer", data.TargetId)
+    TriggerEvent('wais:addmissionxp:robpl', 1) -- added by pamela for wais battlepass
     cb('ok')
 end)
 
@@ -930,6 +933,7 @@ end)
 
 RegisterNUICallback("UseItem", function(data, cb)
     TriggerServerEvent("inventory:server:UseItem", data.inventory, data.item)
+    TriggerEvent('wais:addmissionxp:useitem', 1) -- added by pamela for wais battlepass
     cb('ok')
 end)
 
@@ -987,6 +991,7 @@ RegisterNUICallback("GiveItem", function(data, cb)
             local playerId = GetPlayerServerId(player)
             SetCurrentPedWeapon(PlayerPedId(),'WEAPON_UNARMED',true)
             TriggerServerEvent("inventory:server:GiveItem", playerId, data.item.name, data.amount, data.item.slot)
+            TriggerEvent('wais:addmissionxp:giveitem', 1) -- added by pamela for wais battlepass
         else
             QBCore.Functions.Notify("You do not own this item!", "error")
         end
